@@ -13,9 +13,13 @@ public class Pager {
 	private int startPage;
 
 	private int endPage;
+	
+	private String url;
 
-	public Pager(int totalPages, int currentPage, int buttonsToShow) {
-
+	public Pager(int totalPages, int currentPage, int buttonsToShow, String url) {
+		
+		this.url = url;
+		
 		setButtonsToShow(buttonsToShow);
 
 		int halfPagesToShow = getButtonsToShow() / 2;
@@ -71,9 +75,17 @@ public class Pager {
 		this.endPage = endPage;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	@Override
 	public String toString() {
-		return "Pager [startPage=" + startPage + ", endPage=" + endPage + "]";
+		return "Pager [startPage=" + startPage + ", endPage=" + endPage + ", url=" + url +"]";
 	}
 
 }

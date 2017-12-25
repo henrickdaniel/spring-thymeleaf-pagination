@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<section layout:fragment="content-search"></section>
+
+<div class="row">
+	<div class="form-group col-md-1">
+		<select class="form-control pagination pageSizeSelect" id="pageSizeSelect">
+			<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+				th:value="${pageSize}"
+				th:selected="${pageSize} == ${selectedPageSize}"></option>
+		</select>
+	</div>
+	<div th:if="${resultList.totalPages != 1}"
+		class="form-group col-md-11 pagination-centered">
+		<ul class="pagination">
+			<li th:class="${resultList.number == 0} ? disabled"><a
+				class="pageLink"
+				th:onclick="'loadPag(\'' +  @{${pager.url}(pageSize=${selectedPageSize}, page=1)} +'\');'">&laquo;</a>
+			</li>
+			<li th:class="${resultList.number == 0} ? disabled"><a
+				class="pageLink"
+				th:onclick="'loadPag(\'' +  @{${pager.url}(pageSize=${selectedPageSize}, page=${resultList.number})} +'\');'">&larr;</a>
+			</li>
+			<li
+				th:class="${resultList.number == (page - 1)} ? 'active pointer-disabled'"
+				th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+				<a class="pageLink"
+				th:onclick="'loadPag(\'' +  @{${pager.url}(pageSize=${selectedPageSize}, page=${page})} +'\');'"
+				th:text="${page}"></a>
+			</li>
+			<li
+				th:class="${resultList.number + 1 == resultList.totalPages} ? disabled">
+				<a class="pageLink"
+				th:onclick="'loadPag(\'' + @{${pager.url}(pageSize=${selectedPageSize}, page=${resultList.number + 2})} +'\');'">&rarr;</a>
+			</li>
+			<li
+				th:class="${resultList.number + 1 == resultList.totalPages} ? disabled">
+				<a class="pageLink"
+				th:onclick="'loadPag(\'' + @{${pager.url}(pageSize=${selectedPageSize}, page=${resultList.totalPages})} +'\');'">&raquo;</a>
+			</li>
+		</ul>
+	</div>
+
+</div>
+
+<input type="hidden" th:value="${pager.url}" id="urlPaginate" class="urlPaginate"/>
+
+<script type="text/javascript">
+	/*<![CDATA[*/
+	function getPageSize(){
+		return $('#pageSizeSelect').val();
+	}
+	
+	$( document ).ready(function() {
+		changePageAndSize();
+	});
+	
+	function changePageAndSize() {
+		$('#pageSizeSelect').change(function(evt) {
+			$('.table-search').load($('.urlPaginate').val() + "?pageSize=" + this.value + "&page=1");
+		});
+	}
+	
+	function loadPag(url, classDivLoad){
+		if(classDivLoad == null){
+			$('.table-search').load(url + '&' + $('#form-search').serialize());
+		} else {
+			$(classDivLoad).load(url + '&' + $('#form-search').serialize());
+		}
+	}
+	/*]]>*/
+</script>
+
+</html>

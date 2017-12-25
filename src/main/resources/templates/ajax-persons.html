@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" layout:decorator="pager">
+
+<section layout:fragment="content-search">
+	<table class="table">
+		<tr>
+			<th>First name</th>
+			<th>Last name</th>
+			<th>Age</th>
+		</tr>
+		<tr th:each="person : ${resultList}">
+			<td th:text="${person.firstName}"></td>
+			<td th:text="${person.lastName}"></td>
+			<td th:text="${person.age}"></td>
+		</tr>
+	</table>
+</section>
+</html>

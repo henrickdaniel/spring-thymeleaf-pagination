@@ -36,11 +36,21 @@ public class PersonController {
 	 * @param page
 	 * @return model and view
 	 */
-	@GetMapping("/")
-	public ModelAndView showPersonsPage(@RequestParam("pageSize") Optional<Integer> pageSize,
-			@RequestParam("page") Optional<Integer> page) {
+	@GetMapping("/persons")
+	public ModelAndView showPersonsPage() {
 		ModelAndView modelAndView = new ModelAndView("persons");
+		return modelAndView;
+	}
 
+	@GetMapping("/")
+	public ModelAndView index() {
+		return new ModelAndView("redirect:/persons");
+	}
+
+	@GetMapping("/persons/search")
+	public ModelAndView search(@RequestParam("pageSize") Optional<Integer> pageSize,
+			@RequestParam("page") Optional<Integer> page, @RequestParam(name = "nome", required = false) String nome) {
+		ModelAndView modelAndView = new ModelAndView("/ajax-persons");
 		// Evaluate page size. If requested parameter is null, return initial
 		// page size
 		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
@@ -49,14 +59,13 @@ public class PersonController {
 		// param. decreased by 1.
 		int evalPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
 
-		Page<Person> persons = personService.findAllPageable(new PageRequest(evalPage, evalPageSize));
-		Pager pager = new Pager(persons.getTotalPages(), persons.getNumber(), BUTTONS_TO_SHOW);
+		Page<Person> resultList = personService.findAllPageable(new PageRequest(evalPage, evalPageSize));
+		Pager pager = new Pager(resultList.getTotalPages(), resultList.getNumber(), BUTTONS_TO_SHOW, "/persons/search");
 
-		modelAndView.addObject("persons", persons);
+		modelAndView.addObject("resultList", resultList);
 		modelAndView.addObject("selectedPageSize", evalPageSize);
 		modelAndView.addObject("pageSizes", PAGE_SIZES);
 		modelAndView.addObject("pager", pager);
 		return modelAndView;
 	}
-
 }
