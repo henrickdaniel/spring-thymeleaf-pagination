@@ -22,4 +22,10 @@ public class PersonServiceImpl implements PersonService {
 	public Page<Person> findAllPageable(Pageable pageable) {
 		return personRepository.findAll(pageable);
 	}
+	
+	@Transactional
+	@Override
+	public Page<Person> findByFirstNameContainingIgnoreCase(String name, Pageable pageable) {
+		return personRepository.findByFirstNameContainingIgnoreCase(name, pageable);
+	}
 }

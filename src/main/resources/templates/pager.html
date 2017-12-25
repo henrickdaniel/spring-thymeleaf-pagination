@@ -13,7 +13,7 @@
 				th:selected="${pageSize} == ${selectedPageSize}"></option>
 		</select>
 	</div>
-	<div th:if="${resultList.totalPages != 1}"
+	<div th:if="${resultList.totalPages > 1}"
 		class="form-group col-md-11 pagination-centered">
 		<ul class="pagination">
 			<li th:class="${resultList.number == 0} ? disabled"><a
@@ -66,9 +66,9 @@
 	
 	function loadPag(url, classDivLoad){
 		if(classDivLoad == null){
-			$('.table-search').load(url + '&' + $('#form-search').serialize());
+			$('.table-search').load(url + (url.indexOf('?') != -1 ? '&' : '?') + $('#form-search').serialize());
 		} else {
-			$(classDivLoad).load(url + '&' + $('#form-search').serialize());
+			$(classDivLoad).load(url + (url.indexOf('?') != -1 ? '&' : '?') + $('#form-search').serialize());
 		}
 	}
 	/*]]>*/
