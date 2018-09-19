@@ -2,9 +2,7 @@
 
 ## How to run
 
-Run `mvn install` in root directory
-
-Run `java -jar target/spring-thymeleaf-pagination-0.0.1-SNAPSHOT.jar`
+Run `mvn spring-boot:run` in root directory
 
 Go to http://localhost:8080
 
